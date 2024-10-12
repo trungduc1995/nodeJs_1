@@ -1,0 +1,11 @@
+<h1> Welcom Ejs </h1>
+
+<%- include("./test2", {title : "Title Test 2"}) %>
+
+
+<% for(let _item of data) {%>
+    <p> 
+        Name: <%= _item.name %> <br>
+        Price: <%= _item.price %> 
+    </p>
+<% } %>

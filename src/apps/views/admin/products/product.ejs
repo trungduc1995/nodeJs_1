@@ -1,0 +1,96 @@
+<%- include("../layout/index", {title: "Vietpro Mobile Shop - Product"}) %>
+
+<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2 main">			
+    <div class="row">
+        <ol class="breadcrumb">
+            <li><a href="/admin/dashboard"><svg class="glyph stroked home"><use xlink:href="#stroked-home"></use></svg></a></li>
+            <li class="active">Danh sách sản phẩm</li>
+        </ol>
+    </div><!--/.row-->
+    
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header">Danh sách sản phẩm</h1>
+        </div>
+    </div><!--/.row-->
+    <div id="toolbar" class="btn-group">
+        <a href="/admin/products/create" class="btn btn-success">
+            <i class="glyphicon glyphicon-plus"></i> Thêm sản phẩm
+        </a>
+    </div>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-default">
+                <div class="panel-body">
+
+                    <table 
+                        data-toolbar="#toolbar"
+                        data-toggle="table">
+
+                        <thead>
+                            <tr>
+                                <th data-field="id" data-sortable="true">STT</th>
+                                <th data-field="name"  data-sortable="true">Tên sản phẩm</th>
+                                <th data-field="price" data-sortable="true">Giá</th>
+                                <th>Ảnh sản phẩm</th>
+                                <th>Trạng thái</th>
+                                <th>Danh mục</th>
+                                <th>Hành động</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <% 
+                                let count = 0
+                                for(let _item of products) 
+                            { %>
+                            <tr>
+                                <td><%= count+=1 %></td>
+                                <td> <%= _item.name %> </td>
+                                <td><%= formatCurrency(_item.price) %> vnd</td>
+                                <td style="text-align: center">
+                                    <img width="130" height="180" src="../uploads/images/<%= _item.thumbnail %>" />
+                                </td>
+                                <td>
+                                    <% if (_item.is_stock != false) { %>
+                                    <span class="label label-success">Còn hàng</span>
+                                    <% } else { %>
+                                    <span class="label label-danger">Hết hàng</span>
+                                    <% } %>
+                                </td>
+                                <td><%= _item.cat_id.title %> </td>
+                                <td class="form-group">
+                                    <a href="/admin/products/edit/<%= _item._id %>" class="btn btn-primary"><i class="glyphicon glyphicon-pencil"></i></a>
+                                    <a href="/admin/products/delete/<%= _item._id %>" class="btn btn-danger"><i class="glyphicon glyphicon-remove"></i></a>
+                                </td>
+                            </tr>
+                            <% } %>
+                        </tbody>
+                    </table>
+                </div>
+
+                <% if (paging.length > 1) { %>
+                <div class="panel-footer">
+                    <nav aria-label="Page navigation example">
+                        <ul class="pagination">
+                            <% paging.forEach(item => { %>
+                            <li class="page-item <%= item.is_current == 1 ? 'active': '' %>">
+                                <a class="page-link" href="<%= (item.name != '...') ? item.url : 'javascript:void(0)' %>">
+                                    <%= item.name %>
+                                </a>
+                            </li>
+                            <% }); %>
+                        </ul>
+                    </nav>
+                </div>
+                <% } %>
+            </div>
+        </div>
+    </div><!--/.row-->	
+</div>	<!--/.main-->
+
+<script src="js/jquery-1.11.1.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/bootstrap-table.js"></script>	
+
+<%- include("../layout/footer") %>

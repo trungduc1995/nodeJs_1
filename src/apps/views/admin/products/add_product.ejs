@@ -1,0 +1,156 @@
+<%- include("../layout/index", {title: "Admin - Add Product"}) %>
+
+<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2 main">			
+    <div class="row">
+        <ol class="breadcrumb">
+            <li><a href="/admin/dashboard"><svg class="glyph stroked home"><use xlink:href="#stroked-home"></use></svg></a></li>
+            <li><a href="/admin/products">Quản lý sản phẩm</a></li>
+            <li class="active">Thêm sản phẩm</li>
+        </ol>
+    </div>
+    
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header">Thêm sản phẩm</h1>
+        </div>
+    </div>
+    
+    <div class="row">
+            <div class="col-lg-12">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <form role="form" method="post" enctype="multipart/form-data" action="/admin/products/store">
+                            <div class="col-md-6">                            
+                                <div class="form-group">
+                                    <label>Tên sản phẩm</label>
+                                    <input required name="name" class="form-control" placeholder="">
+                                </div>
+                                                                
+                                <div class="form-group">
+                                    <label>Giá sản phẩm</label>
+                                    <input required name="price" onkeyup="validateInput(this)" type="text" placeholder="0" class="form-control">
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Bảo hành</label>
+                                    <input required name="warranty" type="text" class="form-control">
+                                </div> 
+
+                                <div class="form-group">
+                                    <label>Phụ kiện</label>
+                                    <input required name="accessories" type="text" class="form-control">
+                                </div>    
+
+                                <div class="form-group">
+                                    <label>Khuyến mãi</label>
+                                    <input required name="promotion" type="text" class="form-control">
+                                </div>  
+
+                                <div class="form-group">
+                                    <label>Tình trạng</label>
+                                    <input required name="status" type="text" class="form-control">
+                                </div>  
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Ảnh sản phẩm</label>
+                                    
+                                    <input required name="thumbnail" type="file" id="js-upload-image-input">
+                                    <br>
+                                    <div id="js-upload-image-preview"> </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Danh mục</label>
+                                    <select name="cat_id" class="form-control">
+                                        <% for ( _item of categories ) { %>
+                                        <option value="<%= _item._id %>"> <%= _item.title %> </option>
+                                        <% } %>
+                                    </select>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label>Trạng thái</label>
+                                    <select name="is_stock" class="form-control">
+                                        <option value=1 selected>Còn hàng</option>
+                                        <option value=0>Hết hàng</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label>Sản phẩm nổi bật</label>
+                                    <div class="checkbox">
+                                        <label>
+                                            <input name="featured" type="checkbox" value=1>Nổi bật
+                                        </label>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label>Mô tả sản phẩm</label>
+                                    <textarea id="description" name="description" class="form-control" rows="3" required></textarea>
+                                    <script>
+                                        CKEDITOR.replace( 'description' );
+                                    </script>
+                                </div>
+                                
+                                <button name="sbm" type="submit" class="btn btn-success">Thêm mới</button>
+                                <button type="reset" class="btn btn-default">Làm mới</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+</div>	
+
+<script>
+    
+    window.onload = (event) => {
+        previewImage();
+    };
+
+    function validateInput(target) {
+
+        target.addEventListener('input', function() {
+            let value = this.value.replace(/,/g, ''); // Loại bỏ dấu phân cách
+            if (!isNaN(value) && value !== '') {
+                // Định dạng số với dấu phân cách hàng nghìn
+                this.value = parseFloat(value).toLocaleString('en-US');
+            } else {
+                this.value = '';
+            }
+        });
+
+        target.addEventListener('blur', function() {
+            let value = this.value.replace(/,/g, ''); // Loại bỏ dấu phân cách
+            if (!isNaN(value) && value !== '') {
+                this.value = parseFloat(value).toLocaleString('en-US');
+            }
+        });
+    }
+
+
+    function previewImage(){
+        document.getElementById('js-upload-image-input').addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                
+                reader.onload = function(e) {
+                    console.log(e)
+                    const $target = document.getElementById('js-upload-image-preview');
+                    const img = `<img src="${e.target.result}" style="display: block;max-width: 150px;height: auto">`;
+                    $target.innerHTML = img;
+                }
+                
+                reader.readAsDataURL(file);
+            }
+        });
+    }
+    
+</script>
+
+<%- include("../layout/footer") %>
