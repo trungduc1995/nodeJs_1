@@ -1,6 +1,5 @@
 const UserModel = require('../models/user')
 const Paging    = require('../../common/paginate');
-const { error } = require('selenium-webdriver');
 const Module    = 'user';
 
 
